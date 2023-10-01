@@ -23,7 +23,7 @@ Here's an example of a VirtualHost configuration for a site that's reverse proxi
     RewriteEngine On
     RewriteCond %{HTTP:Connection} Upgrade [NC]
     RewriteCond %{HTTP:Upgrade} websocket [NC]
-    RewriteRule ^/(.*) ws://influxdb:8086/$1  [P,L]
+    RewriteRule ^/?(.*) ws://influxdb:8086/$1  [P,L]
     <Location />
         # only allow access from the local network
         Require ip 10.0.0.0/8
