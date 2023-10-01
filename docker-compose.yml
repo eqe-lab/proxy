@@ -1,0 +1,41 @@
+version: '3'
+
+networks:
+  proxy:
+    external: false
+    ipam:
+      config:
+        - subnet: 172.16.100.0/22
+          gateway: 172.16.100.1
+    name: proxy
+
+services:
+  proxy:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        APACHE_VERSION: ${APACHE_VERSION:-latest}
+    image: eqe-lab/apache2:${APACHE_VERSION:-latest}
+    container_name: ${PROXY_CONTAINER_NAME:-proxy}
+    hostname: ${PROXY_HOSTNAME:-proxy}
+    domainname: ${PROXY_DOMAINNAME:-eqe-lab.com}
+    restart: always
+    networks:
+      proxy:
+        ipv4_address: ${PROXY_IP:-172.16.100.254}
+      redis:
+    ports:
+      - 8080:80
+      - 8443:443
+    env_file:
+      - ${PROXY_BASE_DIR:-./proxy}/proxy.env
+    volumes:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+      - ${PROXY_CERTS_DIR:-./certs}:/etc/apache2/certs:ro
+      - ${PROXY_BASE_DIR:-./proxy}/apache2.conf:/etc/apache2/apache2.conf:ro
+      - ${PROXY_BASE_DIR:-./proxy}/conf:/etc/apache2/conf-enabled:ro
+      - ${PROXY_BASE_DIR:-./proxy}/sites:/etc/apache2/sites-enabled:ro
+      - ${PROXY_BASE_DIR:-./proxy}/logs:/var/log/apache2:rw
+
