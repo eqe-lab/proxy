@@ -1,5 +1,8 @@
 # Apache2 Reverse Proxy Configuration
 
+* Rename `example.env` to `.env` *
+
+
 ## Services
 
 ### proxy
