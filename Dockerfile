@@ -9,7 +9,7 @@ RUN apt-get update && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-RUN a2enmod auth_openidc rewrite ssl headers proxy_http proxy_wstunnel proxy_balancer remoteip
+RUN a2enmod auth_openidc rewrite ssl headers proxy_http proxy_wstunnel proxy_balancer remoteip http2
 
 
 HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 CMD curl --fail http://localhost:80/ || exit 1
